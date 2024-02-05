@@ -45,6 +45,7 @@ Let's install:
 4. You may get errors with the YouCompleteMe plugin not loading, the error says: "The ycmd server SHUT DOWN (restart with :YcmRestartServer)". To solve this problem you must execute the install script from YCM inside the plugin folder. Follow the next steps:
 
     `cd ~/.local/share/nvim/lazy/YouCompleteMe`
+
     `./install.py --clang-completer`
 
 5. You probably want to setup Github Copilot, you will need a working 'node' installation in your computer and then launch the setup using:
@@ -82,27 +83,27 @@ There are plenty of shortcuts but, these are the basic ones: (default <leader> i
 | Ctrl+left       | Unindent current line/block one level                                                                       | vim             |
 | Enter           | Go to function definition                                                                                   | ctags           |
 | Backspace       | Go back from function definition                                                                            | ctags           |
-|                 |                                                                                                             |                 |
+|:---------------:|:------------------------------------------------------------------------------------------------------------|:---------------:|
 | [a              | Go to previous error                                                                                        | ALE             |
 | ]a              | Go to next error                                                                                            | ALE             |
 | [A              | Go to first error                                                                                           | ALE             |
 | ]A              | Go to last error                                                                                            | ALE             |
-|                 |                                                                                                             |                 |
+|:---------------:|:------------------------------------------------------------------------------------------------------------|:---------------:|
 | :Ack colors     | Search everywhere in the project for the word "colors"                                                      | Ack             |
 | Ctrl+P colors   | Search for files with the word "colors" in all the project                                                  | ctrlp           |
 | <Leader>ff      | Find files                                                                                                  | Telescope       |
 | <Leader>fg      | Fidd live grep                                                                                              | Telescope       |
 | <Leader>fb      | Find buffers                                                                                                | Telescope       |
 | <Leader>fh      | Find help tags                                                                                              | Telescope       |
-|                 |                                                                                                             |                 |
+|:---------------:|:------------------------------------------------------------------------------------------------------------|:---------------:|
 | :TagsGenerate!  | Will generate one or more tags files                                                                        | vim-tags        |
-|                 |                                                                                                             |                 |
+|:---------------:|:------------------------------------------------------------------------------------------------------------|:---------------:|
 | gc{motion}      | Comment or uncomment lines that {motion} moves over                                                         | Commentary      |
 | {Visual}gc      | Comment or uncomment the highlighted lines                                                                  | Commentary      |
 | gc?             | Comment or uncomment [?=count] lines. (Example: gc4)                                                        | Commentary      |
 | gcu | gcgc      | Uncomment the current and adjacent commented lines                                                          | Commentary      |
 | :7,17Commentary | Comment/Uncomment from line 7 to line 17 both included                                                      | Commentary      |
-|                 |                                                                                                             |                 |
+|:---------------:|:------------------------------------------------------------------------------------------------------------|:---------------:|
 | Copilot Chat    | Copy code with "y" and then:                                                                                |                 |
 | <Leader>cce     | Explain code                                                                                                | Copilot Chat    |
 | <Leader>cct     | Generate tests                                                                                              | Copilot Chat    |
