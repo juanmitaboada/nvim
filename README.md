@@ -48,11 +48,15 @@ Let's install:
 
     `./install.py --clang-completer`
 
-5. You probably want to setup Github Copilot, you will need a working 'node' installation in your computer and then launch the setup using:
+5. If you are using a SNAP node version, then add this to your ~/.profile:
+
+    `PATH=/snap/node/current/bin:$PATH`
+
+6. You probably want to setup Github Copilot, you will need a working 'node' installation in your computer and then launch the setup using:
 
     `:Copilot setup`
 
-6. You are ready to go
+7. You are ready to go
 
 
 ## Shortcuts
@@ -103,6 +107,14 @@ There are plenty of shortcuts but, these are the basic ones: (default <leader> i
 | gc?             | Comment or uncomment [?=count] lines. (Example: gc4)                                                        | Commentary      |
 | gcu | gcgc      | Uncomment the current and adjacent commented lines                                                          | Commentary      |
 | :7,17Commentary | Comment/Uncomment from line 7 to line 17 both included                                                      | Commentary      |
+|                 |                                                                                                             | -               |
+| Copilot         |                                                                                                             |                 |
+| <Alt>+]         | Next suggestion                                                                                             | Copilot         |
+| <Alt>+[         | Previous suggestion                                                                                         | Copilot         |
+| <Alt>+l         | Accept listed suggestion                                                                                    | Copilot         |
+| <Alt>+<Enter>   | Shows a PANEL with suggestions                                                                              | Copilot         |
+| gr              | PANEL: refresh                                                                                              | Copilot         |
+| <Enter>         | PANEL: to accept the selected suggestion                                                                    | Copilot         |
 |                 |                                                                                                             | -               |
 | Copilot Chat    | Copy code with "y" and then:                                                                                |                 |
 | <Leader>cce     | Explain code                                                                                                | Copilot Chat    |
@@ -179,7 +191,8 @@ def:
 | [Clang](https://github.com/justmao945/vim-clang)                                | Use of clang to parse and complete C/C++ source files                                                                                       |
 | [Clang Format](https://github.com/rhysd/vim-clang-format)                       | Format your C family code                                                                                                                   |
 | [Commentary](https://github.com/tpope/vim-commentary)                           | Comment stuff out                                                                                                                           |
-| [Copilot](https://github.com/github/copilot.vim)                                | GitHub Copilot support                                                                                                                      |
+| [Copilot](https://github.com/github/copilot.vim)                                | Original GitHub Copilot support                                                                                                             |
+| [Copilot Zbirenbaum](https://github.com/zbirenbaum/copilot.lua)                 | Improved GitHub Copilot support                                                                                                             |
 | [Copilot Chat](https://github.com/jellydn/CopilotChat.nvim)                     | GitHub Copilot Chat support                                                                                                                 |
 | [CtrlP](https://github.com/kien/ctrlp.vim)                                      | Full path fuzzy file, buffer, mru, tag, ... finder                                                                                          |
 | [DelimitMate](https://github.com/Raimondi/delimitMate)                          | This plug-in provides automatic closing of quotes, parentheses, brackets, etc.                                                              |
