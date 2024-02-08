@@ -6,11 +6,17 @@ opt.clipboard = "unnamedplus" -- Sync with system clipboard
 opt.completeopt = "menu,menuone,noselect"
 opt.conceallevel = 2 -- Hide * markup for bold and italic, but not markers with substitutions
 opt.confirm = true -- Confirm to save changes before exiting modified buffer
+-- opt.colorcolumn = 80  -- Set red column at 80 characters
 opt.cursorline = false -- Enable highlighting of the current line
+opt.encoding = "utf-8"  -- Set encoding to utf-8
 opt.expandtab = true -- Use spaces instead of tabs
 opt.formatoptions = "jcroqlnt" -- tcqj
 opt.grepformat = "%f:%l:%c:%m"
 opt.grepprg = "rg --vimgrep"
+opt.incsearch = true  -- Incremental search
+opt.hlsearch = true
+opt.hidden = true
+opt.history = 100  -- Keep 100 lines of command line history
 opt.ignorecase = true -- Ignore case
 opt.inccommand = "nosplit" -- preview incremental substitute
 opt.laststatus = 3 -- global statusline
@@ -20,30 +26,36 @@ opt.number = true -- Print line number
 opt.pumblend = 10 -- Popup blend
 opt.pumheight = 10 -- Maximum number of entries in a popup
 opt.relativenumber = false -- Relative line numbers
+opt.ruler = true  -- Show the cursor position all the time
 opt.scrolloff = 4 -- Lines of context
 opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "help", "globals", "skiprtp", "folds" }
 opt.shiftround = true -- Round indent
-opt.shiftwidth = 2 -- Size of an indent
+opt.shiftwidth = 4 -- Size of an indent
 opt.shortmess:append({ W = true, I = true, c = true, C = true })
+opt.showcmd = true -- Show (partial) command in status line
+opt.showmatch = true -- Show matcing brackets
 opt.showmode = false -- Dont show mode since we have a statusline
 opt.sidescrolloff = 8 -- Columns of context
 opt.signcolumn = "yes" -- Always show the signcolumn, otherwise it would shift the text each time
 opt.smartcase = true -- Don't ignore case with capitals
 opt.smartindent = true -- Insert indents automatically
+opt.softtabstop = 4 -- Number of spaces tabs count for
 opt.spelllang = { "en" }
 opt.splitbelow = true -- Put new windows below current
 opt.splitkeep = "screen"
 opt.splitright = true -- Put new windows right of current
-opt.tabstop = 2 -- Number of spaces tabs count for
+opt.tabstop = 4 -- Number of spaces tabs count for
 opt.termguicolors = true -- True color support
-opt.timeoutlen = 300
+opt.textwidth = 80 -- Don't wrap lines at 80 columns (or use 79)
+opt.tabstop = 4
+opt.tw = 0 -- Don't wrap lines at 80 columns (or use 79)
 opt.undofile = true
 opt.undolevels = 10000
 opt.updatetime = 200 -- Save swap file and trigger CursorHold
 opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
 opt.wildmode = "longest:full,full" -- Command-line completion mode
 opt.winminwidth = 5 -- Minimum window width
-opt.wrap = false -- Disable line wrap
+opt.wrap = true -- Disable line wrap
 opt.fillchars = {
   foldopen = "",
   foldclose = "",
@@ -63,34 +75,13 @@ vim.g.markdown_recommended_style = 0
 
 -- OLD VIM configuration
 vim.cmd([[
-set bs=2                            " allow backspacing over everything in insert mode
-set completeopt=menuone
-set tabstop=4
-set tw=0                            " Don't wrap lines at 80 columns (or use 79)
-set linebreak                       " Don't wrap words by default
-set textwidth=0                     " Don't wrap lines by default (or use 79)
-set viminfo='20,\"50                " Read/write a .viminfo file, don't store more than
-set history=100                     " Keep 100 lines of command line history
-set ruler                           " Show the cursor position all the time
-set showcmd                         " Show (partial) command in status line.
-set showmatch                       " Show matching brackets.
-set incsearch                       " Incremental search
-set shiftwidth=4
-set hlsearch
-set hidden
-set mouse=a                         " Enable mouse usage (all modes)
 
-" set colorcolumn=80                " Set red column at 80 characters
-
-" Show tabs and end of line
-set softtabstop=4
-" set hardtabs=4
-set expandtab
-set list
 set lcs=extends:$,tab:/.,eol:$
-set showmatch
-set encoding=utf-8
 ab usetab :set noet ci pi sts=0 sw=4 ts=4 " Show tab character
+
+" Hightlight 80 column
+highlight ColorColumn ctermbg=magenta guibg=magenta
+call matchadd('ColorColumn', '\%81v', 100)
 
 autocmd BufReadPost * if line("'\"") && line("'\"") <= line("$") | exe "normal `\"" | endif
 
