@@ -83,6 +83,12 @@ ab usetab :set noet ci pi sts=0 sw=4 ts=4 " Show tab character
 highlight ColorColumn ctermbg=magenta guibg=magenta
 call matchadd('ColorColumn', '\%81v', 100)
 
+" Cursor shows as a block all the time
+set guicursor = "n-v-c:block,o:hor50,i-ci:hor15,r-cr:hor30,sm:block"
+
+" Ligther visual block selection
+highlight Visual term=reverse cterm=reverse guibg=Grey"
+
 autocmd BufReadPost * if line("'\"") && line("'\"") <= line("$") | exe "normal `\"" | endif
 
 let g:black_linelength = 79
