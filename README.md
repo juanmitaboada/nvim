@@ -72,7 +72,6 @@ There are plenty of shortcuts but, these are the basic ones: (default <leader> i
 | #               | Search backward word under the cursor                                                                       | vim             |
 | K               | Search for the word inside man                                                                              | vim             |
 | gd              | Go to the first definition of the element under the cursor                                                  | vim             |
-| F2              | Start writing and, ultisnips will fill the basic skeleton (check examples)                                  | ultisnips       |
 | F3              | Tagbar panel (on/off)                                                                                       | tagbar          |
 | F4              | NERD Tree (on/off)                                                                                          | nerdtree        |
 | F8              | Save the current session on the current folder                                                              | vim             |
@@ -121,60 +120,6 @@ There are plenty of shortcuts but, these are the basic ones: (default <leader> i
 | <Leader>cct     | Generate tests                                                                                              | Copilot Chat    |
 
 
-#### Ultistnips
-
-if:
-
-    if condition:
-        pass
-
-ife:
-
-    if condition:
-        pass
-    else:
-        pass
-
-ei:
-
-    elif condition:
-        ...
-
-el:
-
-    else:
-        ...
-
-for:
-
-    for item in iterable:
-        pass
-
-wl:
-
-    while condition:
-        ...
-
-cl:
-
-    class ClassName(object):
-        """doctstring for ClassName"""
-        def __init__(self, args):
-            super(ClassName, self).__init__()
-            self.arg = arg
-
-def:
-
-    def function(arg1):
-        """TODO: Docstring for function.
-
-        :arg1: TODO
-        :returns: TODO
-
-        """
-
-
-
 ## Plugins in use
 
 | Plugin name                                                                     | Description                                                                                                                                 |
@@ -219,7 +164,6 @@ def:
 | [Tags](https://github.com/szw/vim-tags)                                         | The Ctags generator                                                                                                                         |
 | [Telescope](https://github.com/nvim-telescope/telescope.nvim)                   | A highly extendable fuzzy finder                                                                                                            |
 | [Typescript](https://github.com/leafgarland/typescript-vim)                     | Syntax file and other settings for TypeScript                                                                                               |
-| [Ultisnips](https://github.com/SirVer/ultisnips)                                | The ultimate solution for snippets                                                                                                          |
 | [Unimparired](https://github.com/tpope/vim-unimpaired)                          | Collection of handy keymappings designed to improve efficency and accesibiilty within the editor                                            |
 | [YouCompleteMe](https://github.com/Valloric/YouCompleteMe)                      | A code-completion engine                                                                                                                    |
 | [Zig](https://github.com/ziglang/zig.vim)                                       | File detection and syntax highlighting for the zig programming language                                                                     |

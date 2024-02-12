@@ -73,6 +73,10 @@ end
 -- Fix markdown indentation settings
 vim.g.markdown_recommended_style = 0
 
+-- Copilot
+vim.g.copilot_no_tab_map = false
+vim.g.copilot_assume_mapped = false
+
 -- OLD VIM configuration
 vim.cmd([[
 

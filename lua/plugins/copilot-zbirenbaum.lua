@@ -4,7 +4,8 @@ return {
       cmd = "Copilot",
       event = "InsertEnter",
       config = function() require("copilot").setup({
-          panel = {
+         suggestion = { enabled=false },
+         panel = {
             enabled = true,
             auto_refresh = true,
             keymap = {
@@ -19,19 +20,19 @@ return {
             ratio = 0.4
             },
         },
-        suggestion = {
-            enabled = true,
-            auto_trigger = true,
-            debounce = 75,
-            keymap = {
-            accept = "<M-l>",
-            accept_word = false,
-            accept_line = false,
-            next = "<M-]>",
-            prev = "<M-[>",
-            dismiss = "<C-]>",
-            },
-        },
+        -- suggestion = {
+        --    enabled = true,
+        --    auto_trigger = true,
+        --    debounce = 75,
+        --    keymap = {
+        --    accept = "<M-l>",
+        --    accept_word = false,
+        --    accept_line = false,
+        --    next = "<M-]>",
+        --    prev = "<M-[>",
+        --    dismiss = "<C-]>",
+        --    },
+        -- },
         filetypes = {
             yaml = false,
             markdown = false,
