@@ -1,0 +1,7 @@
+.netrwhist
+lazy-lock.json
+lazy-lock.json.local
+*.log
+.DS_Store
+.vim-session
+.session.vim
