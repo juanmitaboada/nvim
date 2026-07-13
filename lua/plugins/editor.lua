@@ -180,6 +180,25 @@ return {
         end,
     },
 
+    -- ============================================================
+    -- WAKATIME — automatic coding-time tracking (wakatime.com)
+    --
+    -- Loaded eagerly (lazy = false). Reason: vim-wakatime is a Vimscript
+    -- plugin that hooks the global editing autocmds (BufEnter, CursorMoved,
+    -- InsertEnter, buffer writes) to detect activity. With any lazy-loading
+    -- trigger (event/cmd/keys) those hooks are not installed until the trigger
+    -- fires, so the time goes untracked -- which is exactly why :WakaTimeToday
+    -- did not exist and nothing reached the dashboard.
+    --
+    -- No config is needed here: it reuses the shared ~/.wakatime.cfg (API key)
+    -- and the ~/.wakatime/wakatime-cli binary already set up for classic Vim.
+    -- After :Lazy sync, verify with :WakaTimeToday.
+    -- ============================================================
+    {
+        "wakatime/vim-wakatime",
+        lazy = false,
+    },
+
     -- Colorscheme is the builtin `unokai`, set in init.lua (needs Neovim 0.10+).
 
 }

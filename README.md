@@ -209,6 +209,7 @@ running everywhere:
 | [vim-repeat](https://github.com/tpope/vim-repeat) | Makes `.` repeat supported plugin maps |
 | [vim-unimpaired](https://github.com/tpope/vim-unimpaired) | Handy bracket mappings (`[`, `]`) |
 | [which-key.nvim](https://github.com/folke/which-key.nvim) | Popup that shows the available keybindings |
+| [vim-wakatime](https://github.com/wakatime/vim-wakatime) | Automatic coding-time tracking (wakatime.com) |
 
 ## Language servers and tools
 
