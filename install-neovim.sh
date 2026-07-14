@@ -6,7 +6,7 @@
 # repository. The script only does the boring plumbing:
 #   1. checks what (if anything) is actually missing — nothing to install
 #      means the whole sudo/apt phase is skipped,
-#   2. checks the Neovim version (the unokai colorscheme needs >= 0.10),
+#   2. checks the Neovim version (unokai + native LSP need >= 0.11.3),
 #   3. links this repo into ~/.config/nvim (backing up anything already there),
 #   4. pre-installs plugins and reminds you of the remaining first-run steps.
 #
@@ -54,21 +54,30 @@ pkg_command() {
     esac
 }
 
-# Is Neovim present AND >= 0.10 (needed for the builtin unokai colorscheme)?
-# Sets NVIM_VERSION on success.
+# Minimum Neovim: 0.11.3.
+#   - the builtin `unokai` colorscheme is a 0.11 addition (not 0.10);
+#   - mason-lspconfig / nvim-lspconfig now drive the native LSP via
+#     vim.lsp.enable() and vim.lsp.config() (both "Since: 0.11.0") and the
+#     current nvim-lspconfig requires Nvim 0.11.3+.
+# On anything older the config aborts (missing colorscheme, then nil vim.lsp.*).
+NVIM_MIN_MAJOR=0
+NVIM_MIN_MINOR=11
+NVIM_MIN_PATCH=3
+NVIM_MIN="${NVIM_MIN_MAJOR}.${NVIM_MIN_MINOR}.${NVIM_MIN_PATCH}"
+
+# Is Neovim present AND >= $NVIM_MIN? Sets NVIM_VERSION to whatever was found.
 NVIM_VERSION=""
 nvim_good() {
     command -v nvim >/dev/null 2>&1 || return 1
-    local v maj min
+    local v maj min pat rest cur floor
     v="$(nvim --version | head -1 | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1)"
     [ -n "$v" ] || return 1
     NVIM_VERSION="$v"   # record whatever we found, good or not, for messaging
-    maj="${v%%.*}"
-    min="$(printf '%s' "$v" | cut -d. -f2)"
-    if [ "${maj:-0}" -eq 0 ] && [ "${min:-0}" -lt 10 ]; then
-        return 1
-    fi
-    return 0
+    maj="${v%%.*}"; rest="${v#*.}"; min="${rest%%.*}"; pat="${rest#*.}"
+    pat="${pat%%[!0-9]*}"; [ -n "$pat" ] || pat=0
+    cur=$(( 10#${maj:-0} * 10000 + 10#${min:-0} * 100 + 10#${pat:-0} ))
+    floor=$(( NVIM_MIN_MAJOR * 10000 + NVIM_MIN_MINOR * 100 + NVIM_MIN_PATCH ))
+    [ "$cur" -ge "$floor" ]
 }
 
 # ---- 0. where does the repo live -----------------------------------------
@@ -133,21 +142,26 @@ done
 # ---- 3. Neovim is mandatory: no Neovim -> stop, don't offer anything ------
 if [ "$nvim_state" != good ]; then
     if [ "$nvim_state" = old ]; then
-        err "Neovim ${NVIM_VERSION:-} is too old (need >= 0.10 for the unokai colorscheme)."
+        err "Neovim ${NVIM_VERSION:-} is too old (need >= ${NVIM_MIN} for unokai + native LSP)."
     else
         err "Neovim is not installed."
     fi
     echo
-    warn "Run the following as an administrator, then re-run this script:"
     if [ "${#STILL_MISSING[@]}" -gt 0 ]; then
+        warn "Install these as an administrator, then re-run this script:"
         echo "    sudo apt-get update"
         echo "    sudo apt-get install -y ${STILL_MISSING[*]}"
+        echo
     fi
-    # apt's neovim is often < 0.10, so point at the PPA for a current build.
+    warn "For Neovim >= ${NVIM_MIN}, either use the PPA (needs sudo):"
     echo "    sudo add-apt-repository ppa:neovim-ppa/unstable -y"
     echo "    sudo apt-get update && sudo apt-get install -y neovim"
+    warn "…or grab the official AppImage (no sudo needed):"
+    echo "    mkdir -p ~/.local/bin"
+    echo "    curl -L https://github.com/neovim/neovim/releases/download/v0.11.4/nvim-linux-x86_64.appimage -o ~/.local/bin/nvim"
+    echo "    chmod +x ~/.local/bin/nvim   # ensure ~/.local/bin is on your PATH"
     echo
-    die "This script only sets up Neovim — nothing to do until Neovim (>= 0.10) is available."
+    die "This script only sets up Neovim — nothing to do until Neovim (>= ${NVIM_MIN}) is available."
 fi
 
 info "Neovim ${NVIM_VERSION} OK."

@@ -17,4 +17,9 @@ require("lazy").setup(require("plugins"))
 require("keymaps")
 require("autocmds")
 require("commands.mypy")
-vim.cmd.colorscheme("unokai")
+-- `unokai` is a builtin colorscheme added in Neovim 0.11. The install script
+-- enforces >= 0.11.3, but guard here too so a stray older nvim degrades to a
+-- safe builtin instead of aborting init.lua with E185.
+if not pcall(vim.cmd.colorscheme, "unokai") then
+    pcall(vim.cmd.colorscheme, "habamax")
+end

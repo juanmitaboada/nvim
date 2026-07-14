@@ -47,10 +47,15 @@ reported each one.
 
 ## Requirements
 
-- **Neovim >= 0.10** — the config uses the builtin `unokai` colorscheme, which
-  only exists from 0.10 onwards. On Ubuntu 24.04 the apt package may be older;
-  use the [Neovim PPA](https://launchpad.net/~neovim-ppa/+archive/ubuntu/unstable)
-  (`ppa:neovim-ppa/unstable`) to get a recent build.
+- **Neovim >= 0.11.3** — the config relies on the builtin `unokai` colorscheme
+  (added in 0.11) and the native LSP APIs `vim.lsp.enable()` / `vim.lsp.config()`
+  (since 0.11.0), which the current nvim-lspconfig/mason-lspconfig require at
+  0.11.3+. On an older Neovim you'll hit `E185: Cannot find color scheme 'unokai'`
+  and `nil` `vim.lsp.*` errors. If your distro's package is older, use the
+  [Neovim PPA](https://launchpad.net/~neovim-ppa/+archive/ubuntu/unstable)
+  (`ppa:neovim-ppa/unstable`, needs sudo) or the official
+  [AppImage](https://github.com/neovim/neovim/releases) into `~/.local/bin` (no
+  sudo). The install script checks this for you.
 - **git**, **make**, **gcc** — to clone plugins and build `telescope-fzf-native`.
 - **Node.js + npm** — *only* if you enable GitHub Copilot (an optional feature,
   off by default — see [Optional features](#optional-features-copilot--wakatime)).
@@ -62,6 +67,34 @@ reported each one.
 
 LSP servers, formatters and linters are **not** system packages: Mason installs
 them automatically on first launch (see below).
+
+### Installing Neovim without sudo (AppImage)
+
+If you only have a user account (no sudo) and the system Neovim is too old, grab
+the official AppImage into `~/.local/bin`:
+
+```sh
+mkdir -p ~/.local/bin
+curl -L https://github.com/neovim/neovim/releases/download/v0.11.4/nvim-linux-x86_64.appimage -o ~/.local/bin/nvim
+chmod +x ~/.local/bin/nvim
+```
+
+Then make sure `~/.local/bin` comes **first** on your `PATH`, or a system
+`nvim` in `/usr/bin` will keep shadowing it:
+
+```sh
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc   # ~/.zshrc for zsh
+source ~/.bashrc
+hash -r                                    # drop the shell's cached nvim path
+command -v nvim && nvim --version | head -1   # should print .../.local/bin/nvim and v0.11.4
+```
+
+`hash -r` matters: the shell caches where it first found `nvim`, so without it
+you'd keep launching the old one even after fixing `PATH`. If `command -v nvim`
+still points at `/usr/bin/nvim`, run `type -a nvim` to see the order. Once it
+reports 0.11.4, (re-)run the bootstrap script below. (If the AppImage complains
+about FUSE, run `~/.local/bin/nvim --appimage-extract` and use the extracted
+`squashfs-root/usr/bin/nvim`.)
 
 ## Installation
 

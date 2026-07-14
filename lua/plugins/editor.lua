@@ -206,6 +206,6 @@ return {
         lazy = false,
     },
 
-    -- Colorscheme is the builtin `unokai`, set in init.lua (needs Neovim 0.10+).
+    -- Colorscheme is the builtin `unokai`, set in init.lua (needs Neovim 0.11+).
 
 }

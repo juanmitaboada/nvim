@@ -3,6 +3,26 @@
 All notable changes to this configuration are documented here. The format is
 based on [Keep a Changelog](https://keepachangelog.com/).
 
+## 1.1.1 — Require Neovim 0.11.3 — 2026-07-14
+
+### Added
+
+- **README: "Installing Neovim without sudo (AppImage)"** — step-by-step for
+  user-only machines, including the `PATH` ordering and `hash -r` gotcha that
+  makes a system `nvim` in `/usr/bin` shadow the newer AppImage.
+
+### Fixed
+
+- **Corrected the minimum Neovim version to 0.11.3** (it was wrongly documented
+  and checked as 0.10). The `unokai` colorscheme is a 0.11 addition, and the LSP
+  stack now uses `vim.lsp.enable()` / `vim.lsp.config()` (since 0.11.0) with
+  nvim-lspconfig requiring 0.11.3+. On 0.10 the config aborted with
+  `E185: Cannot find color scheme 'unokai'` followed by `nil` `vim.lsp.*` errors.
+  `install-neovim.sh` now enforces `>= 0.11.3` (patch-aware) and points at both
+  the Neovim PPA and the sudo-free AppImage.
+- **`init.lua` falls back gracefully** if `unokai` is unavailable (`pcall` to
+  `habamax`) instead of aborting startup with `E185`.
+
 ## 1.1.0 — Optional Copilot & WakaTime — 2026-07-14
 
 > **Heads-up for upgraders:** GitHub Copilot and WakaTime are now **off by
