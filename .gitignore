@@ -5,3 +5,4 @@ lazy-lock.json.local
 .DS_Store
 .vim-session
 .session.vim
+/lua/local.lua
