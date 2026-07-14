@@ -3,6 +3,8 @@
 -- Navigation and general UI tools:
 -- Telescope, nvim-tree, aerial, lualine, gitsigns, fugitive, which-key.
 
+local features = require("features")
+
 return {
 
     -- ============================================================
@@ -193,9 +195,14 @@ return {
     -- No config is needed here: it reuses the shared ~/.wakatime.cfg (API key)
     -- and the ~/.wakatime/wakatime-cli binary already set up for classic Vim.
     -- After :Lazy sync, verify with :WakaTimeToday.
+    --
+    -- OPTIONAL and OFF by default (see lua/features.lua): a fresh checkout, or
+    -- a machine that is not mine, never loads or phones WakaTime home. Opt in
+    -- per machine via the git-ignored lua/local.lua ({ wakatime = true }).
     -- ============================================================
     {
         "wakatime/vim-wakatime",
+        enabled = features.wakatime,
         lazy = false,
     },
 

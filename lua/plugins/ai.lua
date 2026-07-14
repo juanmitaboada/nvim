@@ -1,6 +1,14 @@
 -- ~/.config/nvim/lua/plugins/ai.lua
 --
 -- Copilot (official) + CopilotChat (native Neovim).
+--
+-- Both plugins are OPTIONAL and OFF by default (see lua/features.lua): on a
+-- fresh checkout, or on a machine that is not mine, Copilot is neither cloned
+-- nor loaded. A machine opts in via a git-ignored lua/local.lua. The single
+-- `features.copilot` switch gates copilot.vim AND CopilotChat (which depends
+-- on it); the matching keymaps in lua/keymaps.lua are guarded by the same flag.
+
+local features = require("features")
 
 return {
 
@@ -29,6 +37,7 @@ return {
     -- ============================================================
     {
         "github/copilot.vim",
+        enabled = features.copilot,
         lazy = false,
         config = function()
             -- Open the Copilot panel showing several alternative suggestions
@@ -49,6 +58,7 @@ return {
     -- ============================================================
     {
         "CopilotC-Nvim/CopilotChat.nvim",
+        enabled = features.copilot,
         dependencies = {
             { "github/copilot.vim" },
             { "nvim-lua/plenary.nvim" },

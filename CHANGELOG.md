@@ -3,6 +3,40 @@
 All notable changes to this configuration are documented here. The format is
 based on [Keep a Changelog](https://keepachangelog.com/).
 
+## 1.1.0 — Optional Copilot & WakaTime — 2026-07-14
+
+> **Heads-up for upgraders:** GitHub Copilot and WakaTime are now **off by
+> default**. After pulling this version they stop loading until you opt back in
+> on this machine. Create `~/.config/nvim/lua/local.lua` with:
+>
+> ```lua
+> return { copilot = true, wakatime = true }
+> ```
+>
+> then run `:Lazy sync` (or restart Neovim). Re-running `install-neovim.sh` does
+> this for you. Per-flag details in the README's "Optional features" section.
+
+### Added
+
+- **Optional, account-bound plugins** (`lua/features.lua`). GitHub Copilot
+  (`copilot.vim` + `CopilotChat.nvim`) and WakaTime (`vim-wakatime`) are now
+  **off by default**: on a fresh checkout, a server, or another person's
+  machine they are neither installed nor loaded. A machine opts in per feature
+  via a git-ignored `lua/local.lua` (e.g. `return { copilot = true, wakatime = true }`),
+  which overrides the defaults. Each plugin is gated with lazy.nvim's
+  `enabled = ...`, and the Copilot Chat keymaps are guarded by the same flag so
+  nothing maps to missing commands when it's disabled.
+- **Bootstrap prompt** for the optional features: `install-neovim.sh` now offers
+  to create `lua/local.lua` before syncing plugins, and prints the `:Copilot
+  setup` reminder only when Copilot is actually enabled.
+
+### Changed
+
+- **Copilot and WakaTime default to off.** Previously both loaded unconditionally;
+  they are now opt-in per machine (see the upgrade note above).
+- **Node.js + npm** are now an optional requirement, needed only when Copilot is
+  enabled.
+
 ## 1.0.0 — Initial release
 
 First public release of my Neovim configuration: a Lua setup built on

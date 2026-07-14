@@ -52,7 +52,8 @@ reported each one.
   use the [Neovim PPA](https://launchpad.net/~neovim-ppa/+archive/ubuntu/unstable)
   (`ppa:neovim-ppa/unstable`) to get a recent build.
 - **git**, **make**, **gcc** — to clone plugins and build `telescope-fzf-native`.
-- **Node.js + npm** — required by GitHub Copilot.
+- **Node.js + npm** — *only* if you enable GitHub Copilot (an optional feature,
+  off by default — see [Optional features](#optional-features-copilot--wakatime)).
 - **ripgrep** — Telescope live grep.
 - **fd** — Telescope file finding (on Debian/Ubuntu the binary is `fdfind`; the
   install script bridges it to `fd`).
@@ -74,19 +75,24 @@ Then:
 
    `git clone https://github.com/juanmitaboada/nvim ~/.config/nvim`
 
-2. Run the bootstrap script. On Debian/Ubuntu it installs the system packages
-   listed above, checks your Neovim version, and pre-syncs the plugins:
+2. Run the bootstrap script. On Debian/Ubuntu it installs any *missing* system
+   packages (nothing to install → it skips apt/sudo entirely), checks your
+   Neovim version, links the repo into place, and pre-syncs the plugins. It
+   also asks whether to enable the optional features (Copilot, WakaTime) on
+   this machine — see [Optional features](#optional-features-copilot--wakatime):
 
    `~/.config/nvim/install-neovim.sh`
 
-   (On other distros, install the same packages by hand and skip this step.)
+   It is safe to re-run anytime: it skips whatever is already in place and only
+   does what's missing. (On other distros, install the same packages by hand and
+   skip this step.)
 
 3. Launch Neovim. Mason installs the LSP servers, formatters and linters on
    this first run — watch progress with `:Mason`:
 
    `nvim`
 
-4. Authenticate Copilot (first time only):
+4. Authenticate Copilot (first time only, and **only if you enabled Copilot**):
 
    `:Copilot setup`
 
@@ -148,7 +154,49 @@ Python, for example, type a trigger such as `def`, `class`, `for`, `while`,
 `with`, `try` or `ifmain` and press `F2` to expand it, then use `<C-b>` / `<C-z>`
 to jump between the placeholders.
 
+## Optional features (Copilot & WakaTime)
+
+Two plugins are tied to personal accounts, so they are **off by default** and
+never load on a fresh checkout, a server, or anyone else's machine:
+
+- **GitHub Copilot** (`copilot.vim` + `CopilotChat.nvim`) — needs a Copilot
+  subscription, and Node.js + npm.
+- **WakaTime** (`vim-wakatime`) — needs a WakaTime account and `~/.wakatime.cfg`.
+
+The defaults live in `lua/features.lua`. A machine opts in by dropping a
+git-ignored `local.lua` next to it — that is, at `lua/local.lua` inside your
+config dir (usually **`~/.config/nvim/lua/local.lua`**) — which overrides them:
+
+```lua
+-- ~/.config/nvim/lua/local.lua  (not committed)
+return {
+  copilot = true,
+  wakatime = true,
+}
+```
+
+Each flag is independent — set only the ones you want. With a flag off, the
+corresponding plugin is neither installed nor loaded (lazy.nvim skips it via
+`enabled = false`) and its keybindings stay unmapped, so there is nothing to
+disable and nothing phones home.
+
+The easiest way is to let the bootstrap script create it (answer *yes* when it
+asks). To do it by hand, or to change your mind later:
+
+```sh
+# enable both on this machine
+echo 'return { copilot = true, wakatime = true }' > ~/.config/nvim/lua/local.lua
+```
+
+Then run `:Lazy sync` (or restart Neovim) to pull the plugins in — or delete the
+file to go back to the defaults. This is the only file you manage per machine;
+everything else is shared.
+
 ## AI assistance (Copilot)
+
+> Copilot is an [optional feature](#optional-features-copilot--wakatime), off by
+> default. The rest of this section applies once you've enabled it via
+> `lua/local.lua`.
 
 Inline suggestions from GitHub Copilot appear automatically while typing; press
 `Tab` to accept one, or `F12` to open the panel with several alternatives. Run
@@ -188,8 +236,8 @@ running everywhere:
 | [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) | Completion engine (with LSP, buffer, path and snippet sources) |
 | [LuaSnip](https://github.com/L3MON4D3/LuaSnip) | Snippet engine |
 | [friendly-snippets](https://github.com/rafamadriz/friendly-snippets) | Ready-made snippet collection for many languages |
-| [copilot.vim](https://github.com/github/copilot.vim) | GitHub Copilot inline suggestions |
-| [CopilotChat.nvim](https://github.com/CopilotC-Nvim/CopilotChat.nvim) | Conversational Copilot inside Neovim |
+| [copilot.vim](https://github.com/github/copilot.vim) | GitHub Copilot inline suggestions *(optional, off by default)* |
+| [CopilotChat.nvim](https://github.com/CopilotC-Nvim/CopilotChat.nvim) | Conversational Copilot inside Neovim *(optional, off by default)* |
 | [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim) | Fuzzy finder for files, grep, buffers, symbols and more |
 | [telescope-fzf-native](https://github.com/nvim-telescope/telescope-fzf-native.nvim) | Native fzf sorter for Telescope |
 | [plenary.nvim](https://github.com/nvim-lua/plenary.nvim) | Lua utility library used by several plugins |
@@ -209,7 +257,7 @@ running everywhere:
 | [vim-repeat](https://github.com/tpope/vim-repeat) | Makes `.` repeat supported plugin maps |
 | [vim-unimpaired](https://github.com/tpope/vim-unimpaired) | Handy bracket mappings (`[`, `]`) |
 | [which-key.nvim](https://github.com/folke/which-key.nvim) | Popup that shows the available keybindings |
-| [vim-wakatime](https://github.com/wakatime/vim-wakatime) | Automatic coding-time tracking (wakatime.com) |
+| [vim-wakatime](https://github.com/wakatime/vim-wakatime) | Automatic coding-time tracking (wakatime.com) *(optional, off by default)* |
 
 ## Language servers and tools
 

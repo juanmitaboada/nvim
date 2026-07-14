@@ -138,11 +138,18 @@ map("n", "<leader>gd", ":Gdiffsplit<CR>", opts) -- diff
 
 -- ========================================================================
 -- COPILOT CHAT
+--
+-- Copilot is optional and OFF by default (see lua/features.lua). When it's
+-- disabled the plugin isn't loaded and its :CopilotChat* commands don't exist,
+-- so these maps would error on use. Gate them behind the same flag: on a
+-- machine without Copilot, <leader>c* simply stay unmapped.
 -- ========================================================================
 
-map("n", "<leader>cc", ":CopilotChat<CR>", opts)
-map("v", "<leader>cc", ":CopilotChat<CR>", opts)
-map("n", "<leader>ce", ":CopilotChatExplain<CR>", opts)
-map("v", "<leader>ce", ":CopilotChatExplain<CR>", opts)
-map("v", "<leader>cr", ":CopilotChatReview<CR>", opts)
-map("v", "<leader>cf", ":CopilotChatFix<CR>", opts)
+if require("features").copilot then
+    map("n", "<leader>cc", ":CopilotChat<CR>", opts)
+    map("v", "<leader>cc", ":CopilotChat<CR>", opts)
+    map("n", "<leader>ce", ":CopilotChatExplain<CR>", opts)
+    map("v", "<leader>ce", ":CopilotChatExplain<CR>", opts)
+    map("v", "<leader>cr", ":CopilotChatReview<CR>", opts)
+    map("v", "<leader>cf", ":CopilotChatFix<CR>", opts)
+end

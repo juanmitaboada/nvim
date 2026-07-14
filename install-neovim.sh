@@ -186,7 +186,9 @@ if command -v fdfind >/dev/null 2>&1 && ! command -v fd >/dev/null 2>&1; then
 fi
 
 # ---- 5. place the config --------------------------------------------------
-if [ "$REPO_DIR" = "$NVIM_CONFIG" ]; then
+if [ -L "$NVIM_CONFIG" ] && [ "$(readlink -f "$NVIM_CONFIG" 2>/dev/null)" = "$REPO_DIR" ]; then
+    info "$NVIM_CONFIG already links to this repo — nothing to link."
+elif [ "$REPO_DIR" = "$NVIM_CONFIG" ]; then
     info "Repo already lives at $NVIM_CONFIG — nothing to link."
 else
     if [ -e "$NVIM_CONFIG" ] || [ -L "$NVIM_CONFIG" ]; then
@@ -199,20 +201,81 @@ else
     ln -s "$REPO_DIR" "$NVIM_CONFIG"
 fi
 
-# ---- 6. pre-install plugins (best effort) --------------------------------
+# ---- 6. optional per-machine features (Copilot, WakaTime) ----------------
+# Copilot and WakaTime are OFF by default (see lua/features.lua). A machine
+# opts in with a git-ignored lua/local.lua. Offer to create it now, before the
+# sync, so that if you enable them the plugin sync below already pulls them in.
+# Written into the repo dir (NVIM_CONFIG is just a symlink to it).
+LOCAL_LUA="$REPO_DIR/lua/local.lua"
+COPILOT_ENABLED=0
+write_local_lua() {
+    cat > "$LOCAL_LUA" <<'EOF'
+-- lua/local.lua — per-machine optional features (git-ignored).
+-- Toggle each independently; delete this file to fall back to the defaults
+-- in lua/features.lua (everything OFF).
+return {
+    copilot = true,
+    wakatime = true,
+}
+EOF
+}
+
+if [ -e "$LOCAL_LUA" ]; then
+    info "Optional features already configured in lua/local.lua — leaving it untouched."
+    # Cosmetic only (decides the sign-in hint below). Strip full-line comments
+    # first, then look for copilot = true anywhere (handles one-line tables too).
+    if grep -vE '^[[:space:]]*--' "$LOCAL_LUA" | grep -qE 'copilot[[:space:]]*=[[:space:]]*true'; then
+        COPILOT_ENABLED=1
+    fi
+elif [ -t 0 ]; then
+    echo
+    info "Optional features are OFF by default on a fresh checkout:"
+    info "  • GitHub Copilot — inline suggestions + Copilot Chat (needs a Copilot subscription)"
+    info "  • WakaTime       — coding-time tracking (needs a WakaTime account + ~/.wakatime.cfg)"
+    read -r -p ":: Enable them on THIS machine? [y/N] " reply
+    case "$reply" in
+        [yY]|[yY][eE][sS])
+            write_local_lua
+            COPILOT_ENABLED=1
+            info "Wrote lua/local.lua — Copilot and WakaTime enabled here."
+            info "  (edit that file to turn either one back off)"
+            ;;
+        *)
+            info "Leaving optional features OFF. Enable later by creating lua/local.lua with:"
+            printf '        return { copilot = true, wakatime = true }\n'
+            ;;
+    esac
+else
+    warn "Optional features (Copilot, WakaTime) are OFF by default."
+    warn "Enable on this machine by creating lua/local.lua with:"
+    printf '        return { copilot = true, wakatime = true }\n'
+fi
+
+# ---- 7. pre-install plugins (best effort) --------------------------------
 info "Pre-installing plugins headlessly (lazy sync)…"
 if ! nvim --headless "+Lazy! sync" +qa 2>/dev/null; then
     warn "Headless plugin sync skipped — it will run on first launch instead."
 fi
 
-# ---- 7. done --------------------------------------------------------------
+# ---- 8. done --------------------------------------------------------------
 info "Bootstrap complete."
 cat <<'EOF'
 
 Remaining first-run steps:
   1. nvim              # Mason installs LSPs / formatters / linters
                        #   watch progress with  :Mason
+EOF
+if [ "$COPILOT_ENABLED" -eq 1 ]; then
+cat <<'EOF'
   2. :Copilot setup    # authenticate Copilot (first time only)
+EOF
+else
+cat <<'EOF'
+  (Copilot is disabled on this machine — no sign-in needed. To enable it,
+   create lua/local.lua with { copilot = true } and re-run this script.)
+EOF
+fi
+cat <<'EOF'
 
 Verify anytime with  :checkhealth
 EOF
