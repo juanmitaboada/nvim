@@ -3,6 +3,28 @@
 All notable changes to this configuration are documented here. The format is
 based on [Keep a Changelog](https://keepachangelog.com/).
 
+## 1.1.2 — Fix sidebar toggles & <C-space> crash — 2026-07-16
+
+### Fixed
+
+- **F3 (aerial) and F4 (nvim-tree) now toggle correctly and survive `:q`.**
+  Both keys were bound twice: eagerly in `keymaps.lua` (to `:AerialToggle` /
+  `:NvimTreeToggle`) and again as lazy.nvim `keys` load-triggers in
+  `editor.lua`. The `keys` trigger shadowed the eager mapping, and because the
+  bare-string trigger carries no `rhs` the mapping was left inconsistent after
+  the first press: the sidebar opened but would not toggle closed, and closing
+  it with `:q` left it unopenable. The redundant `keys = { "<F3>" }` /
+  `keys = { "<F4>" }` entries are removed; lazy-loading still happens through
+  each plugin's `cmd` list, which the eager keymaps invoke.
+- **`<C-space>` no longer crashes with `E5108` on buffers without a treesitter
+  node.** nvim-treesitter v0.9.3's `init_selection` indexes the node at the
+  cursor with no nil guard, so pressing `<C-space>` in an empty buffer, on a
+  blank line, or in a buffer with no parser aborted in
+  `vim.treesitter.get_node_range` (`attempt to index local 'node_or_range' (a
+  nil value)`). The plugin's `init_selection` keymap is disabled and rebound
+  manually with a guard that only starts a selection when a node exists;
+  `node_incremental` / `node_decremental` are unchanged.
+
 ## 1.1.1 — Require Neovim 0.11.3 — 2026-07-14
 
 ### Added

@@ -33,12 +33,27 @@ return {
                 incremental_selection = {
                     enable = true,
                     keymaps = {
-                        init_selection = "<C-space>",
+                        -- init_selection is bound manually below with a nil-node
+                        -- guard; false keeps the plugin from binding the crashing
+                        -- <C-space> normal-mode map itself.
+                        init_selection = false,
                         node_incremental = "<C-space>",
                         node_decremental = "<bs>",
                     },
                 },
             })
+
+            -- v0.9.3's init_selection indexes the node at cursor with no nil
+            -- guard, so <C-space> on a buffer/position without a treesitter node
+            -- (empty buffer, blank line, missing parser) crashes in
+            -- get_node_range. Bind it ourselves and only start a selection when
+            -- there actually is a node.
+            vim.keymap.set("n", "<C-space>", function()
+                local ok, node = pcall(vim.treesitter.get_node)
+                if ok and node then
+                    require("nvim-treesitter.incremental_selection").init_selection()
+                end
+            end, { desc = "TS init selection (guarded)" })
         end,
     },
 

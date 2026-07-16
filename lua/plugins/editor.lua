@@ -53,7 +53,6 @@ return {
         "nvim-tree/nvim-tree.lua",
         dependencies = { "nvim-tree/nvim-web-devicons" },
         cmd = { "NvimTreeToggle", "NvimTreeFocus" },
-        keys = { "<F4>" },
         config = function()
             -- Disable netrw so it doesn't fight with nvim-tree
             vim.g.loaded_netrw = 1
@@ -86,7 +85,6 @@ return {
         branch = "nvim-0.11",
         dependencies = { "nvim-treesitter/nvim-treesitter" },
         cmd = { "AerialToggle", "AerialOpen" },
-        keys = { "<F3>" },
         config = function()
             require("aerial").setup({
                 backends = { "lsp", "treesitter", "markdown" },
